@@ -44,3 +44,7 @@ Thumbs.db
 # Data (transfer) files as result of MySQL backup/restore files
 /xfergenbedata
 
+
+# Ignore generated DB init artifacts
+init/
+
