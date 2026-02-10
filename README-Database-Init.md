@@ -46,6 +46,13 @@ UNION ALL SELECT 'Procedures', COUNT(*) FROM information_schema.ROUTINES WHERE R
 "
 ```
 
+### Verify Local (3 lines)
+```bash
+cd /home/frans/Documenten/dev/Familiez/MW
+docker compose exec mysql mysql -uHumansService -pXHHxECL54EjvhhPSBLMU humans -e "SELECT 'Tables', COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='humans' UNION ALL SELECT 'Functions', COUNT(*) FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA='humans' AND ROUTINE_TYPE='FUNCTION' UNION ALL SELECT 'Procedures', COUNT(*) FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA='humans' AND ROUTINE_TYPE='PROCEDURE';"
+docker compose logs mysql | grep ERROR
+```
+
 ## Script Details
 
 ### prepare-schema.sh
