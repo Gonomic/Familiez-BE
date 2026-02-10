@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleMothersBasedOnAge`(IN `PersonAgeIn` DATE)
+CREATE PROCEDURE `getPossibleMothersBasedOnAge`(IN `PersonAgeIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get the possible mothers of a person based on the persons birth'
 BEGIN

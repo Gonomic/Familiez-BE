@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `RowCountForFamilyTree`() RETURNS int(11)
+CREATE FUNCTION `RowCountForFamilyTree`() RETURNS int(11)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function to count the number of rows in the FamilyTree table'

@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`172.%` PROCEDURE `GetFamilyTreeUpwards`(IN personIdIn INT, IN numberOfGenerationsIn INT, IN logIn BOOL)
+CREATE PROCEDURE `GetFamilyTreeUpwards`(IN personIdIn INT, IN numberOfGenerationsIn INT, IN logIn BOOL)
 BEGIN
 	DECLARE CompletedOk INT;
 	DECLARE NewTransNo INT;

@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `Clean_temptable_and_testlog`()
+CREATE PROCEDURE `Clean_temptable_and_testlog`()
 BEGIN
 	-- ----------------------------------------------------------------------------------------------------------------------------------------------
     -- Author: 	Frans Dekkers (GoNomics)

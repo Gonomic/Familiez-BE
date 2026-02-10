@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleFathersBasedOnDate`(IN `DateIn` DATE)
+CREATE PROCEDURE `getPossibleFathersBasedOnDate`(IN `DateIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get possible fathers based on a certain date'
 BEGIN

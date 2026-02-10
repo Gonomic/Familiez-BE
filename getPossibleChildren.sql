@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleChildren`(IN `ParentId` INT)
+CREATE PROCEDURE `getPossibleChildren`(IN `ParentId` INT)
     SQL SECURITY INVOKER
     COMMENT 'To get the possible children for a person '
 BEGIN

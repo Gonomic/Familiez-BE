@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossiblePartnersBasedOnDate`(IN `DateIn` DATE)
+CREATE PROCEDURE `getPossiblePartnersBasedOnDate`(IN `DateIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get possible partners based on a certain date'
 BEGIN

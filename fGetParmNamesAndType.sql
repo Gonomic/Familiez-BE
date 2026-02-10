@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fGetParmNamesAndTypes`(`SpecificNameIn` CHAR(60), `TransNoIn` INT) RETURNS text CHARSET utf8
+CREATE FUNCTION `fGetParmNamesAndTypes`(`SpecificNameIn` CHAR(60), `TransNoIn` INT) RETURNS text CHARSET utf8
     DETERMINISTIC
     SQL SECURITY INVOKER
     COMMENT 'Function to return parameter names and type of a specific SPROC'

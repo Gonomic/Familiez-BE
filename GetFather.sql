@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `GetFather`(IN `PersonIdIn` INT)
+CREATE PROCEDURE `GetFather`(IN `PersonIdIn` INT)
     SQL SECURITY INVOKER
     COMMENT 'To get the father of a person based on the persons ID'
 BEGIN

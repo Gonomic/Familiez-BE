@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `AddChildToParent`(IN Child INT, IN Parent INT)
+CREATE PROCEDURE `AddChildToParent`(IN Child INT, IN Parent INT)
 BEGIN
 
 	-- ----------------------------------------------------------------------------------------------------------------------------------------------

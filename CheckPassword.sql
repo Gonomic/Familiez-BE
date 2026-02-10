@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `CheckPassword`(IN `UserIdIn` INT(11), 
+CREATE PROCEDURE `CheckPassword`(IN `UserIdIn` INT(11), 
 													IN `UserPasswordIn` VARCHAR(45))
     COMMENT 'To check the password of a user'
 BEGIN

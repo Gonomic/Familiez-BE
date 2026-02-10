@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `RecordHasBeenChangedBySomebodyElse`(`PersonIdIn` INT, `DateTimeIn` DATETIME) RETURNS tinyint(1)
+CREATE FUNCTION `RecordHasBeenChangedBySomebodyElse`(`PersonIdIn` INT, `DateTimeIn` DATETIME) RETURNS tinyint(1)
     DETERMINISTIC
     SQL SECURITY INVOKER
     COMMENT 'Function to check, based om a timestamp, whether or not a record has been changed by somebody else.'

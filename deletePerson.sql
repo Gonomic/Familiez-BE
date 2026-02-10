@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `deletePerson`(IN `PersonIdIn` INT, IN MotherIdIn INT, IN FatherIdIn INT, IN PartnerIdIn INT, IN TimestampInAsString CHAR(30))
+CREATE PROCEDURE `deletePerson`(IN `PersonIdIn` INT, IN MotherIdIn INT, IN FatherIdIn INT, IN PartnerIdIn INT, IN TimestampInAsString CHAR(30))
     SQL SECURITY INVOKER
     COMMENT 'To delete a Person from the database, incl. links from Family to this Person.'
 BEGIN

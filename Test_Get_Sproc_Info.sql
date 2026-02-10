@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `Test_Get_SPROC_Info`()
+CREATE PROCEDURE `Test_Get_SPROC_Info`()
     SQL SECURITY INVOKER
     COMMENT 'To get the details of SPROCs which can be reached through API'
 BEGIN

@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fGetRelationId`(RelationNameIn CHAR(15)) RETURNS int(11)
+CREATE FUNCTION `fGetRelationId`(RelationNameIn CHAR(15)) RETURNS int(11)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function to get the relation id belonging to a relation name (f.e. "Mother" or "Father").'

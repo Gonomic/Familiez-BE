@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` FUNCTION `GetTranNo`(`SystemNameIn` VARCHAR(50)) RETURNS int(11)
+CREATE FUNCTION `GetTranNo`(`SystemNameIn` VARCHAR(50)) RETURNS int(11)
     DETERMINISTIC
     SQL SECURITY INVOKER
     COMMENT 'Function to get a transactionnumber while at the same time storing the last number and the system it was used for.'

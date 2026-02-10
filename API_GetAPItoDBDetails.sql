@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `API_GetAPItoDBDetails`()
+CREATE PROCEDURE `API_GetAPItoDBDetails`()
     SQL SECURITY INVOKER
     COMMENT 'To get the details of SPROCs which can be reached through API'
 BEGIN

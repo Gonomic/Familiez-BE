@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `ChangeUser`(IN `UserIdIn` INT(11), 
+CREATE PROCEDURE `ChangeUser`(IN `UserIdIn` INT(11), 
 												IN `UserNameIn` VARCHAR(45), 
                                                 IN `UserGivvenNameIn` VARCHAR(45), 
                                                 IN `UserFamilyNameIn` VARCHAR(45), 

@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `AddUser`(IN `UserIdIn` INT(11), 
+CREATE PROCEDURE `AddUser`(IN `UserIdIn` INT(11), 
 												IN `UserNameIn` VARCHAR(45), 
                                                 IN `UserGivvenNameIn` VARCHAR(45), 
                                                 IN `UserFamilyNameIn` VARCHAR(45), 

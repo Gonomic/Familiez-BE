@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fPersonsArePartners`(PersonIn1 INT, PersonIn2 INT) RETURNS int(11)
+CREATE FUNCTION `fPersonsArePartners`(PersonIn1 INT, PersonIn2 INT) RETURNS int(11)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function returns true if two persons are eachothers partner'

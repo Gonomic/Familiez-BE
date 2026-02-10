@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fGetGenderOfPerson`(PersonIdIn INT) RETURNS int(11)
+CREATE FUNCTION `fGetGenderOfPerson`(PersonIdIn INT) RETURNS int(11)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function to get the gender of a person.'

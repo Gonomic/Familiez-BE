@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` FUNCTION `fGetPartner`(PersonIdIn INT) RETURNS int(11)
+CREATE FUNCTION `fGetPartner`(PersonIdIn INT) RETURNS int(11)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function to get the PersonId of the parner of a person with PersonIdIn.'

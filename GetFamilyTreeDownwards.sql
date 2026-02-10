@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`172.%` PROCEDURE `GetFamilyTreeDownwards`(IN personIdIn INT, IN numberOfGenerationsIn INT, IN logingOnIn BOOL)
+CREATE PROCEDURE `GetFamilyTreeDownwards`(IN personIdIn INT, IN numberOfGenerationsIn INT, IN logIn BOOL)
 BEGIN
 	DECLARE CompletedOk INT;
 	DECLARE NewTransNo INT;
@@ -34,14 +34,14 @@ main_proc:
 
 	SET NewTransNo = GetTranNo("GetFamilyTreeDownwards");
     
-	IF logingOnIn THEN
+	IF logIn THEN
 		INSERT INTO humans.testlog 
-		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. Start GetFamilyTreeDownwards() with params: personIdIn= ', IFNULL(personIdIn, "null"), ' , numberOfGenerations= ', IFNULL(numberOfGenerationsIn, "null"), ' and logingOnIn= ', IFNULL(logingOnIn, "null") ),
+			SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. Start GetFamilyTreeDownwards() with params: personIdIn= ', IFNULL(personIdIn, "null"), ' , numberOfGenerations= ', IFNULL(numberOfGenerationsIn, "null"), ' and logIn= ', IFNULL(logIn, "null") ),
 			TestLogDateTime = NOW();
 	END IF;
     
     
-	IF logingOnIn THEN
+	IF logIn THEN
 		INSERT INTO humans.testlog 
 		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. GetFamilyTreeDownwards(): running CTE to get the Familytree.'),
 			TestLogDateTime = NOW();
@@ -86,7 +86,7 @@ main_proc:
 			) 
 			SELECT * FROM FamTree;
     
-	IF logingOnIn THEN
+	IF logIn THEN
 		INSERT INTO humans.testlog 
 		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. End GetFamilyTreeDownwards() with result: ', IFNULL(TransResult, "null")),
 			TestLogDateTime = NOW();

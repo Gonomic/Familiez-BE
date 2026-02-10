@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `ChangePerson`(IN `PersonIdIn` INT(11), 
+CREATE PROCEDURE `ChangePerson`(IN `PersonIdIn` INT(11), 
 												IN `PersonGivvenNameIn` VARCHAR(50), 
                                                 IN `PersonFamilyNameIn` VARCHAR(50), 
                                                 IN `PersonDateOfBirthIn` DATE, 

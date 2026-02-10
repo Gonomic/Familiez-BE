@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleFathers`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `getPossibleFathers`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the possible fathers of a person based on the persons birthdate'
 BEGIN
@@ -96,7 +96,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleFathersBasedOnDate`(IN `DateIn` DATE)
+CREATE PROCEDURE `getPossibleFathersBasedOnDate`(IN `DateIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get possible fathers based on a certain date'
 BEGIN
@@ -188,7 +188,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleMothers`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `getPossibleMothers`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the possible mothers of a person based on the persons birthdate'
 BEGIN
@@ -291,7 +291,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleMothersBasedOnDate`(IN `DateIn` DATE)
+CREATE PROCEDURE `getPossibleMothersBasedOnDate`(IN `DateIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get possible mothers based on a certain date'
 BEGIN
@@ -379,7 +379,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossiblePartners`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `getPossiblePartners`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the possible partners of a person based on the persons birth date'
 BEGIN
@@ -484,7 +484,7 @@ BEGIN
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossiblePartnersBasedOnDate`(IN `DateIn` DATE)
+CREATE PROCEDURE `getPossiblePartnersBasedOnDate`(IN `DateIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get possible partners based on a certain date'
 BEGIN

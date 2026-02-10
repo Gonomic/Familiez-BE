@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossiblePartners`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `getPossiblePartners`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the possible partners of a person based on the persons birth date'
 BEGIN

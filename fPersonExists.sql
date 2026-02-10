@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fPersonExists`(`PersonIdIn` INT) RETURNS tinyint(1)
+CREATE FUNCTION `fPersonExists`(`PersonIdIn` INT) RETURNS tinyint(1)
     DETERMINISTIC
     SQL SECURITY INVOKER
     COMMENT 'Function to check if givven person exists'

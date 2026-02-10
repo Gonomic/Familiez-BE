@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` FUNCTION `fRelationExists`(Child INT, RelationType INT, Parent INT) RETURNS tinyint(1)
+CREATE FUNCTION `fRelationExists`(Child INT, RelationType INT, Parent INT) RETURNS tinyint(1)
     READS SQL DATA
     DETERMINISTIC
     COMMENT 'Function to test if a relation exists between a certain Child and Parent.'

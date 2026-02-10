@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `GetAllParentCouples`(IN `FamilyName` varchar(50))
+CREATE PROCEDURE `GetAllParentCouples`(IN `FamilyName` varchar(50))
     SQL SECURITY INVOKER
     COMMENT 'To get all parents'
 BEGIN

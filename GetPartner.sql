@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `GetPartner`(IN `PersonIdIn` INT)
+CREATE PROCEDURE `GetPartner`(IN `PersonIdIn` INT)
     SQL SECURITY INVOKER
     COMMENT 'To get the partner of a person based on the persons ID'
 BEGIN

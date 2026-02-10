@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `GetPersonDetails`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `GetPersonDetails`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the details of a specific person'
 BEGIN

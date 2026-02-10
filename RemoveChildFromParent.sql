@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `RemoveChildFromParent`(IN Child INT, IN Parent INT)
+CREATE PROCEDURE `RemoveChildFromParent`(IN Child INT, IN Parent INT)
 BEGIN
 
 	-- ----------------------------------------------------------------------------------------------------------------------------------------------

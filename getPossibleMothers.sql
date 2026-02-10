@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `getPossibleMothers`(IN `PersonIDin` INT(11))
+CREATE PROCEDURE `getPossibleMothers`(IN `PersonIDin` INT(11))
     SQL SECURITY INVOKER
     COMMENT 'To get the possible mothers of a person based on the persons birthdate'
 BEGIN
