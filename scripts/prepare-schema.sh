@@ -23,7 +23,8 @@ fi
 for f in "${files[@]}"; do
   echo >> "$outfile"
   echo "-- ===== FILE: $f =====" >> "$outfile"
-  sed -n '1,99999p' "$f" >> "$outfile"
+  # Replace MySQL 8 collations with MariaDB-compatible ones
+  sed -n '1,99999p' "$f" | sed 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' >> "$outfile"
 done
 
 echo "Wrote $outfile (files: ${#files[@]})"

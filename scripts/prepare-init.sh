@@ -21,10 +21,21 @@ if [ ${#files[@]} -eq 0 ]; then
   exit 0
 fi
 
+# Ensure getTranNo loads first as other functions depend on it
+sorted_files=()
 for f in "${files[@]}"; do
+  if [[ "$f" == "getTranNo.sql" ]]; then
+    sorted_files=("$f" "${sorted_files[@]}")
+  else
+    sorted_files+=("$f")
+  fi
+done
+
+for f in "${sorted_files[@]}"; do
   echo >> "$outfile"
   echo "-- ===== FILE: $f =====" >> "$outfile"
-  cat "$f" >> "$outfile"
+  # Remove DEFINER clauses for MariaDB compatibility
+  cat "$f" | sed 's/DEFINER=[^ ]* //g' >> "$outfile"
 done
 
 echo "Wrote $outfile (files: ${#files[@]})"
