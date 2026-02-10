@@ -31,11 +31,36 @@ for f in "${files[@]}"; do
   fi
 done
 
+# Write header
+cat > "$outfile" << 'EOF'
+-- Combined stored procedures and functions
+-- Source files: all files in this folder starting with 'f' or 'get'
+-- Generated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+DELIMITER $$
+
+EOF
+
 for f in "${sorted_files[@]}"; do
   echo >> "$outfile"
   echo "-- ===== FILE: $f =====" >> "$outfile"
-  # Remove DEFINER clauses for MariaDB compatibility
-  cat "$f" | sed 's/DEFINER=[^ ]* //g' >> "$outfile"
+  
+  # Process: remove DEFINER, strip DELIMITER lines
+  # Use tac to work from end: convert only the first (=last in original) bare END to END$$
+  cat "$f" | \
+    sed 's/DEFINER=[^ ]* //g' | \
+    grep -v "^DELIMITER" | \
+    tac | \
+    awk 'BEGIN {fixed=0} 
+         /^[[:space:]]*END[[:space:]]*$/ && fixed==0 {sub(/END[[:space:]]*$/, "END$$"); fixed=1}
+         /^[[:space:]]*END;[[:space:]]*$/ && fixed==0 {sub(/END;[[:space:]]*$/, "END$$"); fixed=1}
+         {print}' | \
+    tac >> "$outfile"
 done
+
+echo >> "$outfile"
+echo "DELIMITER ;" >> "$outfile"
+
+rm -f /tmp/clean_func.sql
 
 echo "Wrote $outfile (files: ${#files[@]})"
