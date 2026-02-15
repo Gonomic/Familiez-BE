@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 set -e
 
-echo "[Entrypoint] MySQL Docker Image 8.0.19-1.1.15"
+echo "[Entrypoint] MariaDB Docker Image 10.6"
 
 # Fetch value from server config
 # We use mysqld --verbose --help instead of my_print_defaults because the
@@ -51,7 +51,7 @@ if [ "$1" = 'mysqld' ]; then
 	result=0
 	output=$("$@" --validate-config) || result=$?
 	if [ ! "$result" = "0" ]; then
-		echo >&2 '[Entrypoint] ERROR: Unable to start MySQL. Please check your configuration.'
+		echo >&2 '[Entrypoint] ERROR: Unable to start MariaDB. Please check your configuration.'
 		echo >&2 "[Entrypoint] $output"
 		exit 1
 	fi
@@ -113,7 +113,7 @@ if [ "$1" = 'mysqld' ]; then
 				sleep 1
 			done
 			if [ "$i" = 0 ]; then
-				echo >&2 '[Entrypoint] Timeout during MySQL init.'
+				echo >&2 '[Entrypoint] Timeout during MariaDB init.'
 				exit 1
 			fi
 		fi
@@ -181,7 +181,7 @@ EOF
 			fi
 
 		elif [ "$MYSQL_USER" -a ! "$MYSQL_PASSWORD" -o ! "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
-			echo '[Entrypoint] Not creating mysql user. MYSQL_USER and MYSQL_PASSWORD must be specified to create a mysql user.'
+			echo '[Entrypoint] Not creating MariaDB user. MYSQL_USER and MYSQL_PASSWORD must be specified to create a user.'
 		fi
 
 
@@ -204,7 +204,7 @@ EOF
 		# This needs to be done outside the normal init, since mysqladmin shutdown will not work after
 		if [ ! -z "$MYSQL_ONETIME_PASSWORD" ]; then
 			if [ -z "yes" ]; then
-				echo "[Entrypoint] User expiration is only supported in MySQL 5.6+"
+				echo "[Entrypoint] User expiration is only supported in newer MariaDB versions"
 			else
 				echo "[Entrypoint] Setting root user as expired. Password will need to be changed before database can be used."
 				SQL=$(mktemp -u /var/lib/mysql-files/XXXXXXXXXX)
@@ -225,7 +225,7 @@ EOF
 		fi
 
 		echo
-		echo '[Entrypoint] MySQL init process done. Ready for start up.'
+		echo '[Entrypoint] MariaDB init process done. Ready for start up.'
 		echo
 	fi
 
@@ -241,7 +241,7 @@ password=healthcheckpass
 EOF
 	touch /mysql-init-complete
 	chown -R mysql:mysql "$DATADIR"
-	echo "[Entrypoint] Starting MySQL 8.0.19-1.1.15"
+	echo "[Entrypoint] Starting MariaDB 10.6"
 fi
 echo '[Entrypoint] Startup!'
 echo "$@"

@@ -108,12 +108,8 @@ transactionBody:BEGIN
 					PersonPlaceOfDeath, 
 
 					PersonIsMale,
-                    
-                    PersonDateOfBirthStatus,
-                    
-                    PersonDateOfDeathStatus,
-                    
-                    Timestamp)
+
+					Timestamp)
 
 				VALUES
 				
@@ -130,12 +126,8 @@ transactionBody:BEGIN
 					PersonPlaceOfDeathIn,
 
 					PersonIsMaleIn,
-                    
-                    PersonDateOfBirthStatusIn,
-                    
-                    PersonDateOfDeathStatusIn,
-                    
-                    NOW());
+
+					NOW());
 				
 		SET IdOfInsertedPerson = LAST_INSERT_ID();
 
@@ -296,6 +288,8 @@ INSERT INTO humans.testlog
 
 	SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. Transactie afgerond, alle wijzigingen zijn comitted. Calling GetPersonDetails.'),
 		TestLogDateTime = NOW();
+
+SELECT CompletedOk;
 
 CALL GetPersonDetails(IdOfInsertedPerson);
 
