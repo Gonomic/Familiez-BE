@@ -290,7 +290,7 @@ BEGIN
 
 		COMMIT;
 
-		SET CompletedOk = 1;
+		SET CompletedOk = 0;
 
 		
 

@@ -273,6 +273,8 @@ transactionBody:BEGIN
 		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. Transactie afgerond, alle wijzigingen zijn comitted. Calling GetPersonDetails.'),
 			TestLogDateTime = NOW();
 
+	SELECT CompletedOk;
+
 	CALL GetPersonDetails(PersonIdIn);
 
 	END;

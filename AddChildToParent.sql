@@ -26,18 +26,20 @@ BEGIN
     DECLARE TransResult INT;
     DECLARE GenderOfPerson INT;
     DECLARE RelationType INT;
+    DECLARE Result CHAR(40);
     
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		ROLLBACK;
 		SET CompletedOk = 2;
+    SET Result = "Error";
 		INSERT INTO humans.testlog 
 			SET TestLog = CONCAT("Transaction-", IFNULL(NewTransNo, "null"), ". ", "Error occured in SPROC: AddChildToParrent(). Rollback executed. Not completed OK (NOK) for parent= ", IFNULL(Parent, 'null'), " and child= ", IFNULL(Child, 'null')),
 				TestLogDateTime = NOW();
-		SELECT "NOK" as Result;
+    SELECT CompletedOk, Result;
 	END;
 	
-    SET CompletedOk = true;
+    SET CompletedOk = 0;
     SET TransResult = 0;
     
     SET NewTransNo = GetTranNo("AddChildToParent");
@@ -67,6 +69,7 @@ BEGIN
 			'. End SPROC: AddChildToParent(). Added child: ', IFNULL(Child, 'null'), ' to parent: ', IFNULL(Parent, 'null')),
 			TestLogDateTime = NOW();
 
-SELECT 'OK' as Result;
+SET Result = "OK";
+SELECT CompletedOk, Result;
    
 END

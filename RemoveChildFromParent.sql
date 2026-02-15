@@ -27,18 +27,20 @@ BEGIN
     DECLARE GenderOfPerson INT;
     DECLARE RelationType INT;
     DECLARE RelationExisted BOOLEAN;
+	DECLARE Result CHAR(40);
     
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		ROLLBACK;
 		SET CompletedOk = 2;
+		SET Result = "Error";
 		INSERT INTO humans.testlog 
 			SET TestLog = CONCAT("Transaction-", IFNULL(NewTransNo, "null"), ". ", "Error occured in SPROC: RemoveChildFromParrent(). Rollback executed. Not completed OK (NOK) for parent= ", IFNULL(Parent, 'null'), " and child= ", IFNULL(Child, 'null')),
 				TestLogDateTime = NOW();
-		SELECT "NOK" as Result;
+		SELECT CompletedOk, Result;
 	END;
 	
-    SET CompletedOk = true;
+    SET CompletedOk = 0;
     SET TransResult = 0;
 	SET NewTransNo = GetTranNo("RemoveChildFromParent");
 	
@@ -50,7 +52,7 @@ BEGIN
     SET GenderOfPerson = fGetGenderOfPerson(Parent);
     
     IF GenderOfPerson IS NULL THEN
-		select 'Parent does not exist' as Result;
+		SET Result = "Parent does not exist";
         INSERT INTO humans.testlog 
 			SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. TransResult= ', IFNULL(TransResult, ''),
 								 '. SPROC: RemoveChildFromParent() to remove child with id= ', IFNULL(Child, null), ' from Parent with ID= ', IFNULL(Parent, null), ': parent does not exist.'),
@@ -75,20 +77,20 @@ BEGIN
 				AND RelationName=RelationType
 				AND RelationWithPerson=Parent;
 			IF RelationExisted AND fRelationExists(Child, RelationType, Parent) THEN
-				SELECT "Relation not removed" as Result;
+				SET Result = "Relation not removed";
 				INSERT INTO humans.testlog 
 					SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. TransResult= ', IFNULL(TransResult, ''),
 									 '. SPROC: RemoveChildFromParent(). Relation with Child= ', IFNULL(Child, 'null'), ' and Parent= ', IFNULL(Parent, 'null'), ' was not removed.'),
 					TestLogDateTime = NOW();
 			ELSE 
-				SELECT "Relation removed" as Result;
+				SET Result = "Relation removed";
 				INSERT INTO humans.testlog 
 					SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. TransResult= ', IFNULL(TransResult, ''),
 									 '. SPROC: RemoveChildFromParent(). Relation with Child= ', IFNULL(Child, 'null'), ' and Parent= ', IFNULL(Parent, 'null'), ' was removed.'),
 					TestLogDateTime = NOW();
 			END IF;
 		ELSE 
-			SELECT "No existing relation" as Result;
+			SET Result = "No existing relation";
 			INSERT INTO humans.testlog 
 				SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. TransResult= ', IFNULL(TransResult, ''),
 								 '. SPROC: RemoveChildFromParent(). Relation with Child= ', IFNULL(Child, 'null'), ' and Parent= ', IFNULL(Parent, 'null'), ' was non existent.'),
@@ -100,4 +102,10 @@ BEGIN
 			'. TransResult= ', IFNULL(TransResult, ''),
 			'. End SPROC: RemoveChildFromParent(). Removed child: ', IFNULL(Child, 'null'), ' from parent: ', IFNULL(Parent, 'null')),
 			TestLogDateTime = NOW();
+    
+    IF Result IS NULL THEN
+        SET Result = "OK";
+    END IF;
+
+    SELECT CompletedOk, Result;
 END

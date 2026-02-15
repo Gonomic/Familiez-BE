@@ -105,6 +105,8 @@ INSERT INTO humans.testlog
 	SET TestLog = CONCAT("TransAction-", IFNULL(NewTransNo, "null"), ", SPROC AddUser(). TransResult= ", IFNULL(transResult, "null"), ". Transactie afgerond, alle wijzigingen zijn comitted. Sending back data that was inserted."),
 		TestLogDateTime = NOW();
 
+SELECT CompletedOk;
+
 SELECT 	UserId, UserName, GivvenName, FamilyName, EmailAdress, CreatedOrLastChanged from humans.users WHERE UserId = LastRecIdInserted;
 
 END;

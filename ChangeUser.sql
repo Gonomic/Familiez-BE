@@ -90,6 +90,8 @@ transactionBody:BEGIN
 
 END transactionBody;
     
+SELECT CompletedOk;
+
 SELECT 	UserId, UserName, GivvenName, FamilyName, EmailAdress, CreatedOrLastChanged from humans.users WHERE UserId = UserIdIn;
 
 END;

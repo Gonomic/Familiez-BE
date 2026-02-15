@@ -34,9 +34,9 @@ BEGIN
     -- RecCount is used to count the number of related records in depended tables.
 	DECLARE RecCount int;
 
-	DECLARE MessageText CHAR;
+	DECLARE MessageText TEXT;
 
-	DECLARE ReturnedSqlState INT;
+	DECLARE ReturnedSqlState CHAR(5);
 
 	DECLARE MySQLErrNo INT;
         
@@ -112,60 +112,15 @@ BEGIN
 
     END IF;
 
-    -- First delete Mother if Mother is there
-    IF MotherIdIn IS NULL THEN
-		INSERT INTO humans.testlog
-		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', Transresult= ', IFNULL(TransResult, 'null'), '. Persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' heeft geen Moeder.'),
-			TestLogDateTime = NOW();
-	ELSE
-        DELETE FROM humans.relations 
-			WHERE RelationPerson = PersonIdIn
-				AND RelationWithPerson = MotherIdIn
-				AND RelationName = RelationIdOfMother;
-		SET TransResult = TransResult + 1;
-		INSERT INTO humans.testlog
-			SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', Transresult= ', IFNULL(TransResult, 'null'), '. Moeder relatie van moeder met ID= ', IFNULL(MotherIdIn, 'null'), ' en Persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' is verwijderd uit de database.'),
-				TestLogDateTime = NOW();
-    END IF;
-
-    -- then Father if father is there
-    IF FatherIdIn IS NULL THEN
-		INSERT INTO humans.testlog
-		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', Transresult= ', IFNULL(TransResult, 'null'), '. Persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' heeft geen Vader.'),
-			TestLogDateTime = NOW();
-    ELSE
-		DELETE FROM humans.relations 
-			WHERE RelationPerson = PersonIdIn
-				AND RelationWithPerson = FatherIdIn
-				AND RelationName = RelationIdOfFather;
-		SET TransResult = TransResult + 1;
-		INSERT INTO humans.testlog
-			SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', TransResult= ', IFNULL(TransResult, 'null'), '. Vader relatie van vader met ID= ', IFNULL(FatherIdIn, 'null'), ' en Persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' is verwijderd uit de database.'),
-				TestLogDateTime = NOW();    
-    END IF;
+    -- First delete ALL relations where this person appears (as parent, child, or partner)
+    DELETE FROM humans.relations 
+        WHERE RelationPerson = PersonIdIn 
+           OR RelationWithPerson = PersonIdIn;
     
-    -- and then Partner if partner is there
-    IF PartnerIdIn IS NULL THEN
-		INSERT INTO humans.testlog
-		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', Transresult= ', IFNULL(TransResult, 'null'), '. Persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' heeft geen Partner.'),
-			TestLogDateTime = NOW();
-    ELSE
-		DELETE FROM humans.relations 
-			WHERE RelationPerson = PersonIdIn
-			AND RelationWithPerson = PartnerIdIn
-			AND RelationName = RelationIdOfPartner;
-	   INSERT INTO humans.testlog
-       		SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', TransResult= ', IFNULL(TransResult, 'null'), '. Partner: ', IFNULL(PartnerIdIn, 'null'), ' verwijderd van persoon: ', IFNULL(PersonIdIn, 'null'), '.'),
-				TestLogDateTime = NOW(); 
-		DELETE FROM humans.relations 
-			WHERE RelationPerson = PartnerIdIn
-			AND RelationWithPerson = PersonIdIn
-			AND RelationName = RelationIdOfPartner;
-		SET TransResult = TransResult + 1;
-		INSERT INTO humans.testlog
-			SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', TransResult= ', IFNULL(TransResult, 'null'), '. Persoon: ', IFNULL(PersonIdIn, 'null'), ' verwijderd als partner van persoon: ', IFNULL(PartnerIdIn, 'null'), '.'),
-            TestLogDateTime = NOW(); 
-    END IF;
+    SET TransResult = TransResult + 1;
+    INSERT INTO humans.testlog
+        SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), ', TransResult= ', IFNULL(TransResult, 'null'), '. Alle relaties van persoon met ID= ', IFNULL(PersonIdIn, 'null'), ' zijn verwijderd uit de database.'),
+            TestLogDateTime = NOW();
     
     -- Lastly delete Person itself 
     DELETE FROM persons

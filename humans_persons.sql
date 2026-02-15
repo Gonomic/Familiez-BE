@@ -30,7 +30,7 @@ CREATE TABLE `persons` (
   `PersonPlaceOfBirth` varchar(50) NOT NULL COMMENT 'Place of birth of a person',
   `PersonDateOfDeath` date DEFAULT NULL COMMENT 'Date of death of a person',
   `PersonPlaceOfDeath` varchar(80) DEFAULT NULL COMMENT 'Place of death of a person',
-  `PersonIsMale` tinyint(1) NOT NULL COMMENT 'Signifies if a person is a male or a female',
+  `PersonIsMale` tinyint(1) DEFAULT NULL COMMENT 'Signifies if a person is a male or a female',
   `PersonPhoto` longblob COMMENT 'Photo of a person',
   `Timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Field to determine for a pending change whether or not the record has been edited by another user ',
   PRIMARY KEY (`PersonID`),
