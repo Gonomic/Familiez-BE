@@ -1,4 +1,7 @@
+-- Generated from: getPossiblePartnersBasedOnAge.sql
+-- Generated: 2026-02-16T21:44:53Z
 DELIMITER $$
+DROP PROCEDURE IF EXISTS `getPossiblePartnersBasedOnAge`$$
 CREATE PROCEDURE `getPossiblePartnersBasedOnAge`(IN `PersonAgeIn` DATE)
     SQL SECURITY INVOKER
     COMMENT 'To get the possible partners of a person based on the persons birth'
@@ -7,6 +10,7 @@ BEGIN
 	SELECT DISTINCT
 
     
+
     P.PersonID as PossiblePartnerID, 
 
     concat(P.PersonGivvenName, ' ', P.PersonFamilyName) as PossiblePartner,
