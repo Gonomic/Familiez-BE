@@ -9,9 +9,10 @@ BE/
 ├── scripts/
 │   ├── prepare-schema.sh     # Generates 01-schema.sql from humans*.sql files
 │   └── prepare-init.sh       # Generates 02-stored-procedures.sql from f*.sql and get*.sql files
-├── init/                     # Generated files (gitignored)
-│   ├── 01-schema.sql         # Combined schema (11 tables)
-│   └── 02-stored-procedures.sql  # Combined routines (10 functions + 8 procedures)
+├── init/                     # Init scripts (SQL files are automatically executed in order)
+│   ├── 01-schema.sql         # Database schema: 11 tables + release tables
+│   ├── 02-*.sql              # Stored procedures and functions (60+ files)
+│   └── 03-releases-data.sql  # Release history data (FE, MW releases)
 ├── humans*.sql               # Source: table definitions
 ├── f*.sql                    # Source: function definitions
 └── get*.sql                  # Source: procedure definitions
@@ -106,6 +107,55 @@ docker compose logs mysql | grep ERROR
 - `getPossiblePartners` - Find possible partners
 - `getPossiblePartnersBasedOnAge` - Find possible partners by age
 - `getPossiblePartnersBasedOnDate` - Find possible partners by date
+
+## Init Files Structure
+
+The `init/` directory contains SQL files that are executed in alphabetical order by MariaDB's docker-entrypoint.sh:
+
+1. **01-schema.sql** - Complete database schema
+   - Base tables: adresses, archive, humans, persons, relations, etc.
+   - Release tables: `fe_releases`, `fe_release_changes`, `mw_releases`, `mw_release_changes`, `be_releases`, `be_release_changes`
+   - Indexes and foreign keys
+
+2. **02-*.sql** (60+ files) - Stored procedures and functions
+   - Functions: getTranNo, fGetFather, fGetMother, fGetPartner, fPersonExists, etc.
+   - Procedures: AddPerson, ChangePerson, DeletePerson, GetPersonsLike, GetFather, etc.
+   - All database logic defined here
+
+3. **03-releases-data.sql** - Release history data
+   - FE Release 01.000.0001: Authentication working, moved Login to left menu
+   - FE Release 01.000.0002: Fixed system health check endpoints
+   - MW Release 01.000.0001: Authentication working, moved Login to left menu
+   - MW Release 01.000.0002: Fixed system health check endpoints
+   - Each release contains detailed change descriptions and change types
+
+## Adding New Release Data
+
+When deploying new releases to the system, add them to `init/03-releases-data.sql`:
+
+```sql
+-- New Release
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0003', NOW(), 'Description of new release');
+
+SET @new_release_id = LAST_INSERT_ID();
+
+-- Changes for the release
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@new_release_id, 'First change', 'Bug Fix'),
+(@new_release_id, 'Second change', 'Feature'),
+(@new_release_id, 'Third change', 'Enhancement');
+```
+
+Then commit to git and rebuild the database container:
+```bash
+git add init/03-releases-data.sql
+git commit -m "Add Release 01.000.0003"
+# From MW folder:
+docker compose down -v
+docker compose up -d
+```
 
 ## Troubleshooting
 

@@ -45,8 +45,10 @@ Thumbs.db
 /xfergenbedata
 
 
-# Ignore generated DB init artifacts
-init/
+# Ignore generated DB init artifacts (auto-generated from source files)
+# Exception: 03-releases-data.sql is manually maintained and should be committed
+/init/01-*.sql
+/init/02-*.sql
 
 # Environment variables
 .env
