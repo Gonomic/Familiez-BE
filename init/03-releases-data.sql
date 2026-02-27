@@ -63,5 +63,35 @@ VALUES
 (@mw_release_01_000_0002_id, 'Added /pingAPI endpoint to PUBLIC_PATHS to allow health checks without authentication', 'Enhancement'),
 (@mw_release_01_000_0002_id, 'Added /pingDB endpoint to PUBLIC_PATHS to allow database diagnostics without authentication', 'Enhancement');
 
+-- ===== Release 01.000.0003: Session expiration handling with graceful 401 error UX =====
+
+-- Frontend Release 01.000.0003
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0003', NOW(), 'Session expiration handling with graceful 401 error notifications and auto-redirect to login');
+
+SET @fe_release_01_000_0003_id = LAST_INSERT_ID();
+
+-- Frontend Release 01.000.0003 - Changes
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@fe_release_01_000_0003_id, 'Added notifyAuthError() function in authService.js to dispatch session expiration events', 'Feature'),
+(@fe_release_01_000_0003_id, 'Enhanced RequireAuth component with Material-UI Snackbar alert for auth errors', 'Feature'),
+(@fe_release_01_000_0003_id, 'Added 401 token expiration checks to 8 API methods (getPersonsLike, getPersonDetails, getFather, getMother, getSiblings, getPartners, getChildren, and getReleases)', 'Feature'),
+(@fe_release_01_000_0003_id, 'Implemented auto-redirect to login page after 3 seconds when token expires', 'Enhancement'),
+(@fe_release_01_000_0003_id, 'Added Dutch language error message for session expiration: "Uw sessie is verlopen. Meld u alstublieft opnieuw aan."', 'Enhancement'),
+(@fe_release_01_000_0003_id, 'Improved error handling consistency across all API methods with proper response status checking', 'Enhancement');
+
+-- Middleware Release 01.000.0003
+INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0003', NOW(), 'Enhanced auth logging for debugging token validation failures');
+
+SET @mw_release_01_000_0003_id = LAST_INSERT_ID();
+
+-- Middleware Release 01.000.0003 - Changes
+INSERT INTO mw_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@mw_release_01_000_0003_id, 'Added auth header validation logging when Bearer token is missing or invalid', 'Enhancement'),
+(@mw_release_01_000_0003_id, 'Added token validation failure logging with path and failure reason', 'Enhancement');
+
 -- Note: Backend (BE) release entries are typically updated separately in BE releases table
 -- This file focuses on FE and MW changes that affect the overall system architecture
