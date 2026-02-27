@@ -79,7 +79,8 @@ VALUES
 (@fe_release_01_000_0003_id, 'Added 401 token expiration checks to 8 API methods (getPersonsLike, getPersonDetails, getFather, getMother, getSiblings, getPartners, getChildren, and getReleases)', 'Feature'),
 (@fe_release_01_000_0003_id, 'Implemented auto-redirect to login page after 3 seconds when token expires', 'Enhancement'),
 (@fe_release_01_000_0003_id, 'Added Dutch language error message for session expiration: "Uw sessie is verlopen. Meld u alstublieft opnieuw aan."', 'Enhancement'),
-(@fe_release_01_000_0003_id, 'Improved error handling consistency across all API methods with proper response status checking', 'Enhancement');
+(@fe_release_01_000_0003_id, 'Improved error handling consistency across all API methods with proper response status checking', 'Enhancement'),
+(@fe_release_01_000_0003_id, 'Changed cancel button label from "Afbreken" to "Annuleren" in PersonAddForm and PersonDeleteForm for UI consistency', 'Enhancement');
 
 -- Middleware Release 01.000.0003
 INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
