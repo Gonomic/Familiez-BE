@@ -96,5 +96,35 @@ VALUES
 (@mw_release_01_000_0003_id, 'Added auth header validation logging when Bearer token is missing or invalid', 'Enhancement'),
 (@mw_release_01_000_0003_id, 'Added token validation failure logging with path and failure reason', 'Enhancement');
 
+-- ===== Release 01.000.0004: Display authenticated username in TopBar =====
+
+-- Frontend Release 01.000.0004
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0004', NOW(), 'Display authenticated username in TopBar after SSO login');
+
+SET @fe_release_01_000_0004_id = LAST_INSERT_ID();
+
+-- Frontend Release 01.000.0004 - Changes
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@fe_release_01_000_0004_id, 'Added JWT token decoding to extract user information from ID token', 'Feature'),
+(@fe_release_01_000_0004_id, 'Added getUserInfo() function in authService.js to extract username from token claims', 'Feature'),
+(@fe_release_01_000_0004_id, 'Updated TopBar to display username in format: Familiez (username)', 'Feature'),
+(@fe_release_01_000_0004_id, 'Updated OAuth scope to include "profile" scope for user claim access', 'Enhancement'),
+(@fe_release_01_000_0004_id, 'Added username extraction from preferred_username or sub claim with domain stripping', 'Enhancement'),
+(@fe_release_01_000_0004_id, 'TopBar updates username when authentication state changes (login/logout)', 'Enhancement');
+
+-- Middleware Release 01.000.0004
+INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0004', NOW(), 'Support profile scope in OAuth token exchange');
+
+SET @mw_release_01_000_0004_id = LAST_INSERT_ID();
+
+-- Middleware Release 01.000.0004 - Changes
+INSERT INTO mw_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@mw_release_01_000_0004_id, 'OAuth token exchange endpoint now properly handles "profile" scope requests from frontend', 'Enhancement'),
+(@mw_release_01_000_0004_id, 'Improved JWT decoding to support all OIDC standard claims (given_name, family_name, name, email, preferred_username)', 'Enhancement');
+
 -- Note: Backend (BE) release entries are typically updated separately in BE releases table
 -- This file focuses on FE and MW changes that affect the overall system architecture
