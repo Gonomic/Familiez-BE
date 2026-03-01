@@ -126,5 +126,45 @@ VALUES
 (@mw_release_01_000_0004_id, 'OAuth token exchange endpoint now properly handles "profile" scope requests from frontend', 'Enhancement'),
 (@mw_release_01_000_0004_id, 'Improved JWT decoding to support all OIDC standard claims (given_name, family_name, name, email, preferred_username)', 'Enhancement');
 
--- Note: Backend (BE) release entries are typically updated separately in BE releases table
--- This file focuses on FE and MW changes that affect the overall system architecture
+-- ===== Release 01.000.0005: User authenticatie met LDAP groepen - role-based access control =====
+
+-- Frontend Release 01.000.0005
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0005', NOW(), 'User authenticatie met LDAP groepen - Users kunnen alleen kijken, Admins kunnen ook wijzigen, toevoegen en verwijderen');
+
+SET @fe_release_01_000_0005_id = LAST_INSERT_ID();
+
+-- Frontend Release 01.000.0005 - Changes
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@fe_release_01_000_0005_id, 'Added role-based access control with LDAP group integration (Familiez_Users, Familiez_Admins)', 'Feature'),
+(@fe_release_01_000_0005_id, 'Created PersonViewForm component for read-only person data viewing (available to all users)', 'Feature'),
+(@fe_release_01_000_0005_id, 'Added "Persoon inzien" option to PersonContextMenu for all users', 'Feature'),
+(@fe_release_01_000_0005_id, 'Restricted edit/delete/add operations to admin users only in PersonContextMenu', 'Feature'),
+(@fe_release_01_000_0005_id, 'Updated RightDrawer to hide "Persoon toevoegen" button for non-admin users', 'Feature'),
+(@fe_release_01_000_0005_id, 'Added fetchUserRole() to authService.js to retrieve user role from middleware', 'Feature'),
+(@fe_release_01_000_0005_id, 'Display user role (User/Admin) next to username in TopBar', 'Feature'),
+(@fe_release_01_000_0005_id, 'Fixed logout flow to clear Synology SSO session via background API call', 'Bug Fix'),
+(@fe_release_01_000_0005_id, 'Added max_age=0 and prompt=login OAuth parameters to force re-authentication after logout', 'Bug Fix'),
+(@fe_release_01_000_0005_id, 'Fixed OAuth state persistence with localStorage fallback for React StrictMode compatibility', 'Bug Fix'),
+(@fe_release_01_000_0005_id, 'Added useRef guard in AuthCallback to prevent duplicate token exchange in development mode', 'Bug Fix'),
+(@fe_release_01_000_0005_id, 'Removed all debugging console.log statements from FamilyTreeCanvas component', 'Enhancement');
+
+-- Middleware Release 01.000.0005
+INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('01.000.0005', NOW(), 'User authenticatie met LDAP groepen - role-based endpoint protection');
+
+SET @mw_release_01_000_0005_id = LAST_INSERT_ID();
+
+-- Middleware Release 01.000.0005 - Changes
+INSERT INTO mw_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES 
+(@mw_release_01_000_0005_id, 'Integrated LDAP authentication with Synology Directory Server (ldaps://192.168.1.10:636)', 'Feature'),
+(@mw_release_01_000_0005_id, 'Added fetch_ldap_groups() function to query user group membership', 'Feature'),
+(@mw_release_01_000_0005_id, 'Created require_admin() decorator to protect write endpoints (returns 403 for non-admins)', 'Feature'),
+(@mw_release_01_000_0005_id, 'Added /auth/me endpoint to return user role information (admin/user/none)', 'Feature'),
+(@mw_release_01_000_0005_id, 'Protected AddPerson, UpdatePerson, DeletePerson endpoints with @require_admin decorator', 'Feature'),
+(@mw_release_01_000_0005_id, 'Added python-ldap dependency for LDAP queries', 'Enhancement'),
+(@mw_release_01_000_0005_id, 'Enhanced require_auth() decorator to pass username to protected endpoints', 'Enhancement'),
+(@mw_release_01_000_0005_id, 'Updated JWT verification with 120 seconds leeway for clock drift tolerance', 'Enhancement');
+
