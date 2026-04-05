@@ -10,7 +10,9 @@ BEGIN
 
     P.PersonID as PossibleFatherID, 
 
-    concat(P.PersonGivvenName, ' ', P.PersonFamilyName) as PossibleFather
+    concat(P.PersonGivvenName, ' ', P.PersonFamilyName) as PossibleFather,
+
+    P.PersonDateOfBirth as PersonDateOfBirth
 
     
 

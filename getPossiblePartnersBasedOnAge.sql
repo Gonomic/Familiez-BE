@@ -11,7 +11,7 @@ BEGIN
 
     concat(P.PersonGivvenName, ' ', P.PersonFamilyName) as PossiblePartner,
 
-    concat('(', P.PersonDateOfBirth, ')') as PersonDateOfBirth,
+    P.PersonDateOfBirth as PersonDateOfBirth,
 
     P.PersonDateOfBirth as SortDate,
 
