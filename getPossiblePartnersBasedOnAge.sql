@@ -27,6 +27,13 @@ BEGIN
 
 	  AND YEAR(P.PersonDateOfBirth) < (YEAR(PersonAgeIn) + 60)
 
+            AND NOT EXISTS (
+                    SELECT 1
+                    FROM relations R
+                    WHERE R.RelationName = 3
+                        AND (R.RelationPerson = P.PersonID OR R.RelationWithPerson = P.PersonID)
+            )
+
         
 
     ORDER BY SortDate;
