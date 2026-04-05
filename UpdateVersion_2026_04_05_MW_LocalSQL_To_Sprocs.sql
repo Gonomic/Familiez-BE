@@ -11,6 +11,8 @@ SOURCE GetFileMeta.sql;
 SOURCE GetPersonFiles.sql;
 SOURCE GetFamilyFiles.sql;
 SOURCE GetReleasesByComponent.sql;
+SOURCE AddFileForPerson.sql;
+SOURCE AddFileForFamily.sql;
 
 INSERT INTO be_releases (ReleaseNumber, ReleaseDate, Description)
 VALUES ('0.9.8', NOW(), 'Start migration of MW local SQL to BE sprocs (GetPersonDetails_v2).');
@@ -24,7 +26,8 @@ VALUES
     (@be_release_id, 'Added GetPartnerForPerson sproc to replace MW inline partner query.', 'feature'),
     (@be_release_id, 'Added GetFileMeta sproc for file metadata reads used by download and thumbnail endpoints.', 'feature'),
     (@be_release_id, 'Added GetPersonFiles and GetFamilyFiles sprocs for file list endpoints.', 'feature'),
-    (@be_release_id, 'Added GetReleasesByComponent sproc with component whitelist for fe/mw/be.', 'feature');
+    (@be_release_id, 'Added GetReleasesByComponent sproc with component whitelist for fe/mw/be.', 'feature'),
+    (@be_release_id, 'Added AddFileForPerson and AddFileForFamily write sprocs for atomic file metadata linking.', 'feature');
 
 INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
 VALUES ('0.9.8', NOW(), 'GetPersonDetails endpoint now calls GetPersonDetails_v2.');
@@ -37,10 +40,11 @@ VALUES
     (@mw_release_id, 'Replaced inline SQL in /GetPartners endpoint with CALL GetPartnerForPerson.', 'refactor'),
     (@mw_release_id, 'Replaced inline SQL in fetch_releases with CALL GetReleasesByComponent.', 'refactor'),
     (@mw_release_id, 'Replaced inline SQL in /api/files/{file_id} and /api/files/{file_id}/thumbnail with CALL GetFileMeta.', 'refactor'),
-    (@mw_release_id, 'Replaced inline SQL in /api/person/{person_id}/files and /api/family/{father_id}/{mother_id}/files with sprocs.', 'refactor');
+    (@mw_release_id, 'Replaced inline SQL in /api/person/{person_id}/files and /api/family/{father_id}/{mother_id}/files with sprocs.', 'refactor'),
+    (@mw_release_id, 'Migrated /api/files/upload DB writes to CALL AddFileForPerson/AddFileForFamily with disk cleanup on DB failure.', 'refactor');
 
 SELECT
     'Familiez BE + MW Updated' AS Status,
     NOW() AS UpdateTime,
     'BE 0.9.8 / MW 0.9.8' AS Version,
-    'Phase 1 migration in progress: person, partner, release, and file read endpoints now use stored procedures' AS Summary;
+    'Phase 1 reads and Phase 2 upload writes migrated to stored procedures' AS Summary;
