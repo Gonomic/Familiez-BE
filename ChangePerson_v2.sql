@@ -27,6 +27,7 @@ BEGIN
     DECLARE RelationIdOfPartner int;
     DECLARE EffectiveBirthStatus int;
     DECLARE EffectiveDeathStatus int;
+    DECLARE PersonExists int;
     DECLARE MessageText CHAR;
     DECLARE ReturnedSqlState INT;
     DECLARE MySQLErrNo INT;
@@ -40,7 +41,7 @@ BEGIN
             SET TestLog = CONCAT("Transaction-", IFNULL(NewTransNo, "null"), " SPROC ChangePerson_v2(). Error occured()=",
                                  IFNULL(MessageText, "null"), "/State=", IFNULL(ReturnedSqlState, "null"), "/ErrNo=", IFNULL(MySqlErrNo, "null"), "). Rollback executed. CompletedOk= ", IFNULL(CompletedOk, 'null')),
                 TestLogDateTime = NOW();
-        SELECT CompletedOk AS CompletedOk;
+        SELECT CompletedOk AS CompletedOk, -1 AS Result, 'Wijziging mislukt - controleer database logs' AS ErrorMessage;
     END;
 
 main_proc:
@@ -49,19 +50,22 @@ BEGIN
     SET TransResult = 0;
     SET NewTransNo = GetTranNo("ChangePerson_v2");
 
+    SET PersonExists = 0;
+
     SELECT
         COALESCE(PersonDateOfBirthStatusIn, PersonDateOfBirthStatus, 0),
-        COALESCE(PersonDateOfDeathStatusIn, PersonDateOfDeathStatus, 0)
-    INTO EffectiveBirthStatus, EffectiveDeathStatus
+        COALESCE(PersonDateOfDeathStatusIn, PersonDateOfDeathStatus, 0),
+        1
+    INTO EffectiveBirthStatus, EffectiveDeathStatus, PersonExists
     FROM humans.persons
     WHERE PersonID = PersonIdIn;
 
-    IF EffectiveBirthStatus IS NULL THEN
+    IF PersonExists = 0 THEN
         SET CompletedOk = 1;
         INSERT INTO humans.testlog
             SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. ChangePerson_v2 person not found. PersonID=', IFNULL(PersonIdIn, 'null')),
                 TestLogDateTime = NOW();
-        SELECT CompletedOk AS CompletedOk;
+        SELECT CompletedOk AS CompletedOk, 404 AS Result, 'Persoon niet gevonden' AS ErrorMessage;
         LEAVE main_proc;
     END IF;
 
@@ -224,7 +228,7 @@ transactionBody:BEGIN
         SET TestLog = CONCAT('TransAction-', IFNULL(NewTransNo, 'null'), '. Transactie afgerond, alle wijzigingen zijn comitted. Calling GetPersonDetails.'),
             TestLogDateTime = NOW();
 
-    SELECT CompletedOk AS CompletedOk;
+    SELECT CompletedOk AS CompletedOk, 0 AS Result, NULL AS ErrorMessage;
     CALL GetPersonDetails(PersonIdIn);
 END;
 
