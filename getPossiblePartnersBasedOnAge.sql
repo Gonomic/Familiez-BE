@@ -30,8 +30,10 @@ BEGIN
             AND NOT EXISTS (
                     SELECT 1
                     FROM relations R
-                    WHERE R.RelationName = 3
-                        AND (R.RelationPerson = P.PersonID OR R.RelationWithPerson = P.PersonID)
+                                        JOIN relationnames RN
+                                            ON RN.RelationnameID = R.RelationName
+                                        WHERE LOWER(RN.RelationnameName) IN ('partner', 'echtgenoot', 'echtgenote')
+                                            AND (R.RelationPerson = P.PersonID OR R.RelationWithPerson = P.PersonID)
             )
 
         
