@@ -34,6 +34,45 @@ VALUES
 (@mw_release_01_000_0001_id, 'Added CORS error response handler for proper header injection on 401', 'Enhancement'),
 (@mw_release_01_000_0001_id, 'Added /GetReleases endpoint with LEFT JOIN to release changes', 'Feature');
 
+
+-- ===== Release 2026-04-16: Marriage and diagnostics follow-up =====
+
+-- Frontend Release 1.0.2
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('1.0.2', NOW(), 'Huwelijk startdatum opslaan verbeterd; geen onnodige persoonsupdate; canvas datumweergave gecorrigeerd.');
+
+SET @fe_release_1_0_2_id = LAST_INSERT_ID();
+
+-- Frontend Release 1.0.2 - Changes
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES
+(@fe_release_1_0_2_id, 'PersonEditForm slaat bij alleen trouwdatum-wijziging geen UpdatePerson meer op (vermijdt valse foutmelding).', 'fix'),
+(@fe_release_1_0_2_id, 'FamilyTreeCanvas datum parsing voor huwelijk startdatum timezone-safe gemaakt zodat canvas dezelfde datum toont als opgeslagen.', 'fix'),
+(@fe_release_1_0_2_id, 'Regressietests toegevoegd/aangepast voor PersonEditForm en mogelijke ouder/partner endpoints.', 'test');
+
+-- Middleware Release 0.9.9
+INSERT INTO mw_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('0.9.9', NOW(), 'Marriages API uitgebreid en testdekking aangepast aan auth-middleware gedrag.');
+
+SET @mw_release_0_9_9_id = LAST_INSERT_ID();
+
+-- Middleware Release 0.9.9 - Changes
+INSERT INTO mw_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES
+(@mw_release_0_9_9_id, 'Nieuwe/uitgebreide marriage endpoints gebruikt voor actief huwelijk, historie, aanmaken, beëindigen en startdatum wijzigen.', 'feature'),
+(@mw_release_0_9_9_id, 'API tests geactualiseerd voor auth-verplichte endpoints (Authorization header + verify_sso_token mocks).', 'test');
+
+-- Backend Release 1.0.0
+INSERT INTO be_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('1.0.0', NOW(), 'Stored procedure diagnostics verbeterd en huwelijksfunctionaliteit (MVP) afgerond.');
+
+SET @be_release_1_0_0_id = LAST_INSERT_ID();
+
+-- Backend Release 1.0.0 - Changes
+INSERT INTO be_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES
+(@be_release_1_0_0_id, 'EXIT HANDLER diagnostics (SQLSTATE, errno, message) gehard in prioritaire sprocs zodat testlog echte SQL-fouten toont.', 'fix'),
+(@be_release_1_0_0_id, 'Marriages tabel en sprocs toegevoegd voor expliciete huwelijken (start/einde/reden, actief huwelijk, historie).', 'feature');
 -- ===== Release 01.000.0002: Fixed system health check endpoints =====
 
 -- Frontend Release 01.000.0002
