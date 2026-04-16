@@ -63,6 +63,62 @@ WHERE NOT EXISTS (
 );
 
 -- ------------------------------
+-- FE release 1.0.3
+-- ------------------------------
+SET @fe_release_number = '1.0.3';
+SET @fe_release_description = 'Console warnings opgelost voor PersonTriangle, PersonContextMenu en PersonEditForm select-waarden.';
+
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+SELECT @fe_release_number, NOW(), @fe_release_description
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM fe_releases
+    WHERE ReleaseNumber = @fe_release_number
+      AND Description = @fe_release_description
+);
+
+SELECT ReleaseID INTO @fe_release_id
+FROM fe_releases
+WHERE ReleaseNumber = @fe_release_number
+  AND Description = @fe_release_description
+ORDER BY ReleaseID DESC
+LIMIT 1;
+
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+SELECT @fe_release_id, 'PersonTriangle prop type voor PersonIsMale aangepast naar bool/number zodat API-waarden 0/1 geen warning geven.', 'fix'
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM fe_release_changes
+    WHERE ReleaseID = @fe_release_id
+      AND ChangeDescription = 'PersonTriangle prop type voor PersonIsMale aangepast naar bool/number zodat API-waarden 0/1 geen warning geven.'
+      AND ChangeType = 'fix'
+);
+
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+SELECT @fe_release_id, 'PersonContextMenu aangepast zodat Menu geen Fragment als direct child ontvangt (MUI warning opgelost).', 'fix'
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM fe_release_changes
+    WHERE ReleaseID = @fe_release_id
+      AND ChangeDescription = 'PersonContextMenu aangepast zodat Menu geen Fragment als direct child ontvangt (MUI warning opgelost).'
+      AND ChangeType = 'fix'
+);
+
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+SELECT @fe_release_id, 'PersonEditForm select-lijsten voorzien van fallback-opties voor huidige IDs buiten de dynamische picklist (out-of-range warning opgelost).', 'fix'
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM fe_release_changes
+    WHERE ReleaseID = @fe_release_id
+      AND ChangeDescription = 'PersonEditForm select-lijsten voorzien van fallback-opties voor huidige IDs buiten de dynamische picklist (out-of-range warning opgelost).'
+      AND ChangeType = 'fix'
+);
+
+-- ------------------------------
 -- MW release 0.9.9
 -- ------------------------------
 SET @mw_release_number = '0.9.9';
@@ -155,4 +211,4 @@ WHERE NOT EXISTS (
 SELECT
     'Release notes synced' AS Status,
     NOW() AS UpdateTime,
-    'FE 1.0.2 | MW 0.9.9 | BE 1.0.0' AS Versions;
+  'FE 1.0.2 + 1.0.3 | MW 0.9.9 | BE 1.0.0' AS Versions;

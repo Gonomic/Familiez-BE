@@ -207,3 +207,18 @@ VALUES
 (@mw_release_01_000_0005_id, 'Enhanced require_auth() decorator to pass username to protected endpoints', 'Enhancement'),
 (@mw_release_01_000_0005_id, 'Updated JWT verification with 120 seconds leeway for clock drift tolerance', 'Enhancement');
 
+-- ===== Release 1.0.3: FE console warnings opgelost =====
+
+-- Frontend Release 1.0.3
+INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
+VALUES ('1.0.3', NOW(), 'Console warnings opgelost voor PersonTriangle, PersonContextMenu en PersonEditForm select-waarden.');
+
+SET @fe_release_1_0_3_id = LAST_INSERT_ID();
+
+-- Frontend Release 1.0.3 - Changes
+INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
+VALUES
+(@fe_release_1_0_3_id, 'PersonTriangle prop type voor PersonIsMale aangepast naar bool/number zodat API-waarden 0/1 geen warning geven.', 'fix'),
+(@fe_release_1_0_3_id, 'PersonContextMenu aangepast zodat Menu geen Fragment als direct child ontvangt (MUI warning opgelost).', 'fix'),
+(@fe_release_1_0_3_id, 'PersonEditForm select-lijsten voorzien van fallback-opties voor huidige IDs buiten de dynamische picklist (out-of-range warning opgelost).', 'fix');
+
