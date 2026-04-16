@@ -12,16 +12,16 @@ BEGIN
 	DECLARE RecCount int;
 
 
-	DECLARE MessageText CHAR;
+	DECLARE MessageText VARCHAR(1024);
 
-	DECLARE ReturnedSqlState INT;
+	DECLARE ReturnedSqlState VARCHAR(10);
 
 	DECLARE MySQLErrNo INT;
         
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
  	BEGIN
 
-		GET CURRENT DIAGNOSTICS CONDITION 1 MessageText = message_text, ReturnedSqlState = RETURNED_SQLSTATE, MySqlErrNo = MYSQL_ERRNO;
+		GET CURRENT DIAGNOSTICS CONDITION 1 MessageText = MESSAGE_TEXT, ReturnedSqlState = RETURNED_SQLSTATE, MySQLErrNo = MYSQL_ERRNO;
         
 		ROLLBACK;
 
@@ -30,7 +30,7 @@ BEGIN
 		INSERT INTO humans.testlog 
 
 			SET TestLog = CONCAT("Transaction-", IFNULL(NewTransNo, "null"), " SPROC getPossiblePartnersBasedOnDate(). Error occured(M=", 
-								 IFNULL(MessageText, "null"), "/State=", IFNULL(ReturnedSqlState, "null"), "/ErrNo=", IFNULL(MySqlErrNo, "null"), "). Rollback executed. CompletedOk= ", CompletedOk),
+								 IFNULL(MessageText, "null"), "/State=", IFNULL(ReturnedSqlState, "null"), "/ErrNo=", IFNULL(MySQLErrNo, "null"), "). Rollback executed. CompletedOk= ", CompletedOk),
 
 				TestLogDateTime = NOW();
 

@@ -28,18 +28,21 @@ BEGIN
     DECLARE EffectiveBirthStatus int;
     DECLARE EffectiveDeathStatus int;
     DECLARE PersonExists int;
-    DECLARE MessageText CHAR;
-    DECLARE ReturnedSqlState INT;
+    DECLARE MessageText VARCHAR(1024);
+    DECLARE ReturnedSqlState VARCHAR(10);
     DECLARE MySQLErrNo INT;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        GET CURRENT DIAGNOSTICS CONDITION 1 MessageText = message_text, ReturnedSqlState = RETURNED_SQLSTATE, MySqlErrNo = MYSQL_ERRNO;
+        GET CURRENT DIAGNOSTICS CONDITION 1
+            MessageText = MESSAGE_TEXT,
+            ReturnedSqlState = RETURNED_SQLSTATE,
+            MySQLErrNo = MYSQL_ERRNO;
         ROLLBACK;
         SET CompletedOk = 2;
         INSERT INTO humans.testlog
             SET TestLog = CONCAT("Transaction-", IFNULL(NewTransNo, "null"), " SPROC ChangePerson_v2(). Error occured()=",
-                                 IFNULL(MessageText, "null"), "/State=", IFNULL(ReturnedSqlState, "null"), "/ErrNo=", IFNULL(MySqlErrNo, "null"), "). Rollback executed. CompletedOk= ", IFNULL(CompletedOk, 'null')),
+                                 IFNULL(MessageText, "null"), "/State=", IFNULL(ReturnedSqlState, "null"), "/ErrNo=", IFNULL(MySQLErrNo, "null"), "). Rollback executed. CompletedOk= ", IFNULL(CompletedOk, 'null')),
                 TestLogDateTime = NOW();
         SELECT CompletedOk AS CompletedOk, -1 AS Result, 'Wijziging mislukt - controleer database logs' AS ErrorMessage;
     END;

@@ -21,15 +21,15 @@ BEGIN
     DECLARE FileIDOut INT;
 
     DECLARE MessageText VARCHAR(1024);
-    DECLARE ReturnedSqlState VARCHAR(5);
-    DECLARE MySqlErrNo INT;
+    DECLARE ReturnedSqlState VARCHAR(10);
+    DECLARE MySQLErrNo INT;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         GET CURRENT DIAGNOSTICS CONDITION 1
             MessageText = MESSAGE_TEXT,
             ReturnedSqlState = RETURNED_SQLSTATE,
-            MySqlErrNo = MYSQL_ERRNO;
+            MySQLErrNo = MYSQL_ERRNO;
 
         ROLLBACK;
         SET CompletedOk = 2;
@@ -39,7 +39,7 @@ BEGIN
             SET TestLog = CONCAT(
                 'TransAction-', IFNULL(NewTransNo, 'null'),
                 '. SPROC AddFileForFamily() failed. State=', IFNULL(ReturnedSqlState, 'null'),
-                ', ErrNo=', IFNULL(MySqlErrNo, 'null'),
+                ', ErrNo=', IFNULL(MySQLErrNo, 'null'),
                 ', Msg=', IFNULL(MessageText, 'null'),
                 '. Rollback executed. CompletedOk=', CompletedOk
             ),
