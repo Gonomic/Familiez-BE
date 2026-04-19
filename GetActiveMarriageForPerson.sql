@@ -19,6 +19,7 @@ BEGIN
         P.PersonDateOfBirth AS PartnerDateOfBirth,
         P.PersonDateOfDeath AS PartnerDateOfDeath,
         M.StartDate,
+        M.MarriagePlace,
         M.EndDate,
         M.EndReason,
         1 AS IsActive,
