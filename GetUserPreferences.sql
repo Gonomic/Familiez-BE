@@ -10,7 +10,8 @@ BEGIN
         P.linked_person_id AS linked_person_id,
         P.generations_up AS generations_up,
         P.generations_down AS generations_down,
-        P.auto_show_tree AS auto_show_tree
+        P.auto_show_tree AS auto_show_tree,
+        P.last_added_person_id AS last_added_person_id
     FROM humans.familiez_user_preferences P
     WHERE P.username = TRIM(UsernameIn);
 

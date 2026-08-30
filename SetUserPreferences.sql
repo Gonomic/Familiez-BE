@@ -5,7 +5,8 @@ CREATE PROCEDURE `SetUserPreferences`(
     IN PersonIdIn INT,
     IN GenUpIn INT,
     IN GenDownIn INT,
-    IN AutoShowIn TINYINT(1)
+    IN AutoShowIn TINYINT(1),
+    IN LastAddedPersonIdIn INT
 )
     SQL SECURITY INVOKER
     COMMENT 'Insert or update linked tree preferences for one username'
@@ -20,7 +21,9 @@ BEGIN
     DECLARE NormalizedGenUp INT DEFAULT 3;
     DECLARE NormalizedGenDown INT DEFAULT 3;
     DECLARE NormalizedAutoShow TINYINT(1) DEFAULT 0;
+    DECLARE NormalizedLastAddedPersonId INT DEFAULT NULL;
     DECLARE LinkedPersonExists INT DEFAULT 0;
+    DECLARE LastAddedPersonExists INT DEFAULT 0;
 
     DECLARE MessageText VARCHAR(255);
     DECLARE ReturnedSqlState VARCHAR(10);
@@ -69,6 +72,7 @@ BEGIN
         SET NormalizedGenDown = COALESCE(GenDownIn, 3);
         SET NormalizedAutoShow = IF(COALESCE(AutoShowIn, 0) <> 0, 1, 0);
         SET NormalizedPersonId = PersonIdIn;
+        SET NormalizedLastAddedPersonId = LastAddedPersonIdIn;
 
         IF NormalizedGenUp < 0 OR NormalizedGenUp > 10 THEN
             SET CompletedOk = 1;
@@ -105,6 +109,21 @@ BEGIN
             END IF;
         END IF;
 
+        IF NormalizedLastAddedPersonId IS NOT NULL THEN
+            IF NormalizedLastAddedPersonId <= 0 THEN
+                SET NormalizedLastAddedPersonId = NULL;
+            ELSE
+                SELECT COUNT(*)
+                INTO LastAddedPersonExists
+                FROM humans.persons
+                WHERE PersonID = NormalizedLastAddedPersonId;
+
+                IF LastAddedPersonExists = 0 THEN
+                    SET NormalizedLastAddedPersonId = NULL;
+                END IF;
+            END IF;
+        END IF;
+
         START TRANSACTION;
 
             INSERT INTO humans.familiez_user_preferences (
@@ -112,19 +131,22 @@ BEGIN
                 linked_person_id,
                 generations_up,
                 generations_down,
-                auto_show_tree
+                auto_show_tree,
+                last_added_person_id
             ) VALUES (
                 NormalizedUsername,
                 NormalizedPersonId,
                 NormalizedGenUp,
                 NormalizedGenDown,
-                NormalizedAutoShow
+                NormalizedAutoShow,
+                NormalizedLastAddedPersonId
             )
             ON DUPLICATE KEY UPDATE
                 linked_person_id = VALUES(linked_person_id),
                 generations_up = VALUES(generations_up),
                 generations_down = VALUES(generations_down),
-                auto_show_tree = VALUES(auto_show_tree);
+                auto_show_tree = VALUES(auto_show_tree),
+                last_added_person_id = VALUES(last_added_person_id);
 
             INSERT INTO humans.testlog (
                 TestLog,
@@ -136,7 +158,8 @@ BEGIN
                     ', linked_person_id=', IFNULL(NormalizedPersonId, '(null)'),
                     ', generations_up=', NormalizedGenUp,
                     ', generations_down=', NormalizedGenDown,
-                    ', auto_show_tree=', NormalizedAutoShow
+                    ', auto_show_tree=', NormalizedAutoShow,
+                    ', last_added_person_id=', IFNULL(NormalizedLastAddedPersonId, '(null)')
                 ),
                 NOW()
             );
