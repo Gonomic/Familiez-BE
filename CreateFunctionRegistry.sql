@@ -1,0 +1,45 @@
+CREATE DATABASE IF NOT EXISTS `humans`;
+USE `humans`;
+
+CREATE TABLE IF NOT EXISTS `function_registry` (
+    `FunctionID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `Layer` ENUM('FE', 'MW', 'BE') NOT NULL,
+    `FunctionName` VARCHAR(255) NOT NULL,
+    `Version` INT UNSIGNED NOT NULL DEFAULT 1,
+    `SignatureHash` CHAR(64) NOT NULL,
+    `LastChangedCommit` VARCHAR(64) DEFAULT NULL,
+    `LastChangedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Status` ENUM('active', 'deprecated', 'removed') NOT NULL DEFAULT 'active',
+    PRIMARY KEY (`FunctionID`),
+    UNIQUE KEY `UQ_FUNCTION_REGISTRY_LAYER_NAME` (`Layer`, `FunctionName`),
+    KEY `IX_FUNCTION_REGISTRY_STATUS` (`Status`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `function_dependencies` (
+    `DependencyID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `CallerFunctionID` INT UNSIGNED NOT NULL,
+    `CalleeFunctionID` INT UNSIGNED NOT NULL,
+    `RequiredMinVersion` INT UNSIGNED NOT NULL DEFAULT 1,
+    PRIMARY KEY (`DependencyID`),
+    UNIQUE KEY `UQ_FUNCTION_DEPENDENCIES_CALLER_CALLEE` (`CallerFunctionID`, `CalleeFunctionID`),
+    CONSTRAINT `FK_FUNCTION_DEPENDENCIES_CALLER`
+        FOREIGN KEY (`CallerFunctionID`) REFERENCES `function_registry` (`FunctionID`)
+        ON DELETE CASCADE,
+    CONSTRAINT `FK_FUNCTION_DEPENDENCIES_CALLEE`
+        FOREIGN KEY (`CalleeFunctionID`) REFERENCES `function_registry` (`FunctionID`)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `function_registry_audit` (
+    `AuditID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `FunctionID` INT UNSIGNED NOT NULL,
+    `OldVersion` INT UNSIGNED DEFAULT NULL,
+    `NewVersion` INT UNSIGNED NOT NULL,
+    `BumpReason` VARCHAR(64) NOT NULL,
+    `ChangedBy` VARCHAR(255) DEFAULT NULL,
+    `ChangedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`AuditID`),
+    KEY `IX_FUNCTION_REGISTRY_AUDIT_FUNCTION` (`FunctionID`),
+    CONSTRAINT `FK_FUNCTION_REGISTRY_AUDIT_FUNCTION`
+        FOREIGN KEY (`FunctionID`) REFERENCES `function_registry` (`FunctionID`)
+) ENGINE=InnoDB;
