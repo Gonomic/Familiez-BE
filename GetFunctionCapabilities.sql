@@ -49,6 +49,7 @@ BEGIN
                        'status', Status
                    ))
                    FROM humans.function_registry
+                  WHERE Status = 'active'
                ), JSON_ARRAY()),
                'dependencies', COALESCE((
                    SELECT JSON_ARRAYAGG(JSON_OBJECT(
@@ -57,7 +58,13 @@ BEGIN
                        'calleeFunctionId', CalleeFunctionID,
                        'requiredMinVersion', CONCAT('v', RequiredMinVersion)
                    ))
-                   FROM humans.function_dependencies
+                                     FROM humans.function_dependencies d
+                                    JOIN humans.function_registry caller
+                                        ON caller.FunctionID = d.CallerFunctionID
+                                     AND caller.Status = 'active'
+                                    JOIN humans.function_registry callee
+                                        ON callee.FunctionID = d.CalleeFunctionID
+                                     AND callee.Status = 'active'
                ), JSON_ARRAY())
            ) AS Capabilities;
 END$$

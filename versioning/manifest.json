@@ -1,6 +1,6 @@
 {
   "component": "DB",
-  "dockerImageTag": "familiez-db:3.0.0",
+  "dockerImageTag": "familiez-db:4.0.0",
   "functions": [
     {
       "file": "API_GetAPItoDBDetails.sql",
@@ -1318,20 +1318,6 @@
         }
       ],
       "signatureHash": "sha256:43d7b4d458c1de0e9e4239a603bfd3c7bf0f7f3e07cd728fb1830ad8a554eaa7"
-    },
-    {
-      "file": "GetReleasesByComponent.sql",
-      "layer": "BE",
-      "line": 3,
-      "name": "GetReleasesByComponent",
-      "parameters": [
-        {
-          "mode": "IN",
-          "name": "ComponentIn",
-          "type": "VARCHAR(10)"
-        }
-      ],
-      "signatureHash": "sha256:a09d003cedb647fd89d429d2839b0aa6f1788586da107e69988128ba3dca3176"
     },
     {
       "file": "GetUserPreferences.sql",
@@ -7254,20 +7240,6 @@
       "signatureHash": "sha256:881e6f0f72d7db302b3aff6434175ff5ea75807b7398c012a466bcbdb5b094c9"
     },
     {
-      "file": "init/02-067-GetReleasesByComponent.sql",
-      "layer": "BE",
-      "line": 6,
-      "name": "GetReleasesByComponent",
-      "parameters": [
-        {
-          "mode": "IN",
-          "name": "ComponentIn",
-          "type": "VARCHAR(10)"
-        }
-      ],
-      "signatureHash": "sha256:a09d003cedb647fd89d429d2839b0aa6f1788586da107e69988128ba3dca3176"
-    },
-    {
       "file": "init/02-068-InsertPersonDetails.sql",
       "layer": "BE",
       "line": 5,
@@ -7516,7 +7488,7 @@
       "signatureHash": "sha256:0efc7a71ae58f5093ff133c3637207084671fce760f01a9b89e7da9bcaeecac8"
     }
   ],
-  "generatedAt": "2026-09-11T22:08:24Z",
-  "sourceCommit": "57316ca88c468d59bd064eda7f002bc9a991d8ce",
-  "version": "3.0.0"
+  "generatedAt": "2026-09-11T22:34:07Z",
+  "sourceCommit": "ba78863c65c5f894b0e85bb2db5f398cfd440758",
+  "version": "4.0.0"
 }

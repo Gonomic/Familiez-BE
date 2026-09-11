@@ -114,7 +114,7 @@ The `init/` directory contains SQL files that are executed in alphabetical order
 
 1. **01-schema.sql** - Complete database schema
    - Base tables: adresses, archive, humans, persons, relations, etc.
-   - Release tables: `fe_releases`, `fe_release_changes`, `mw_releases`, `mw_release_changes`, `be_releases`, `be_release_changes`
+   - Versioning tables: `function_registry`, `function_dependencies`, `function_registry_audit`
    - Indexes and foreign keys
 
 2. **02-*.sql** (60+ files) - Stored procedures and functions
@@ -129,33 +129,11 @@ The `init/` directory contains SQL files that are executed in alphabetical order
    - MW Release 01.000.0002: Fixed system health check endpoints
    - Each release contains detailed change descriptions and change types
 
-## Adding New Release Data
+### Adding Versioning Data
 
-When deploying new releases to the system, add them to `init/03-releases-data.sql`:
-
-```sql
--- New Release
-INSERT INTO fe_releases (ReleaseNumber, ReleaseDate, Description)
-VALUES ('01.000.0003', NOW(), 'Description of new release');
-
-SET @new_release_id = LAST_INSERT_ID();
-
--- Changes for the release
-INSERT INTO fe_release_changes (ReleaseID, ChangeDescription, ChangeType)
-VALUES 
-(@new_release_id, 'First change', 'Bug Fix'),
-(@new_release_id, 'Second change', 'Feature'),
-(@new_release_id, 'Third change', 'Enhancement');
-```
-
-Then commit to git and rebuild the database container:
-```bash
-git add init/03-releases-data.sql
-git commit -m "Add Release 01.000.0003"
-# From MW folder:
-docker compose down -v
-docker compose up -d
-```
+Use the local versioning orchestrator in `Deploy/versioning/run_local_release.py`.
+It scans FE, MW, and BE, updates the function registry through the registry
+procedures, and writes the stack manifest used by the compatibility gate.
 
 ## Troubleshooting
 
