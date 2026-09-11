@@ -1,6 +1,6 @@
 {
   "component": "DB",
-  "dockerImageTag": "familiez-db:1.0.0",
+  "dockerImageTag": "familiez-db:3.0.0",
   "functions": [
     {
       "file": "API_GetAPItoDBDetails.sql",
@@ -1172,6 +1172,14 @@
       "signatureHash": "sha256:995bd35f77f49b0be1e52f06d559635601e413c41bc47c320da5f63caee30fe3"
     },
     {
+      "file": "GetFunctionCapabilities.sql",
+      "layer": "BE",
+      "line": 3,
+      "name": "GetFunctionCapabilities",
+      "parameters": [],
+      "signatureHash": "sha256:6825c7a28411063bd0a4f2f8fce41fdda0ce4668309fd3b36f3caedf6068cf47"
+    },
+    {
       "file": "GetMarriageHistoryForPerson.sql",
       "layer": "BE",
       "line": 3,
@@ -1338,6 +1346,14 @@
         }
       ],
       "signatureHash": "sha256:dc82ae2aa5747bc8e4f89c7b218809535ebca2162cd9106c3f5f8a6c1e823649"
+    },
+    {
+      "file": "GetVersioningValidationProbe.sql",
+      "layer": "BE",
+      "line": 3,
+      "name": "GetVersioningValidationProbe",
+      "parameters": [],
+      "signatureHash": "sha256:b158b2c92191b415829cd101c8d75dd09c40c1f64db9b01801f62cc450ba0760"
     },
     {
       "file": "InitialDB.sql",
@@ -7500,7 +7516,7 @@
       "signatureHash": "sha256:0efc7a71ae58f5093ff133c3637207084671fce760f01a9b89e7da9bcaeecac8"
     }
   ],
-  "generatedAt": "2026-09-10T17:16:13Z",
-  "sourceCommit": "ebcbcb0c0e5d0d5f66f41b05af3f6828431f196b",
-  "version": "1.0.0"
+  "generatedAt": "2026-09-11T22:08:24Z",
+  "sourceCommit": "57316ca88c468d59bd064eda7f002bc9a991d8ce",
+  "version": "3.0.0"
 }
