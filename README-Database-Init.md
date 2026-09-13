@@ -14,6 +14,7 @@ BE/
 │   ├── 02-*.sql              # Stored procedures and functions (60+ files)
 │   └── 03-releases-data.sql  # Release history data (FE, MW releases)
 ├── humans*.sql               # Source: table definitions
+├── CreateVersioningManifests.sql # Component- and stack-manifest tables
 ├── f*.sql                    # Source: function definitions
 └── get*.sql                  # Source: procedure definitions
 ```
@@ -114,7 +115,7 @@ The `init/` directory contains SQL files that are executed in alphabetical order
 
 1. **01-schema.sql** - Complete database schema
    - Base tables: adresses, archive, humans, persons, relations, etc.
-   - Versioning tables: `function_registry`, `function_dependencies`, `function_registry_audit`
+   - Versioning tables: `function_registry`, `function_dependencies`, `function_registry_audit`, `component_manifests`, `stack_manifests`
    - Indexes and foreign keys
 
 2. **02-*.sql** (60+ files) - Stored procedures and functions
@@ -134,6 +135,8 @@ The `init/` directory contains SQL files that are executed in alphabetical order
 Use the local versioning orchestrator in `Deploy/versioning/run_local_release.py`.
 It scans FE, MW, and BE, updates the function registry through the registry
 procedures, and writes the stack manifest used by the compatibility gate.
+It also registers the component manifests and active stack manifest in the
+database, while retaining the JSON artifacts used by the compatibility gate.
 
 ## Troubleshooting
 

@@ -1,6 +1,6 @@
 {
   "component": "DB",
-  "dockerImageTag": "familiez-db:4.0.0",
+  "dockerImageTag": "familiez-db:5.0.0",
   "functions": [
     {
       "file": "API_GetAPItoDBDetails.sql",
@@ -871,6 +871,14 @@
         }
       ],
       "signatureHash": "sha256:a48155bbe2cf5ebde1986ed03a1f580007da0455b087f5df5ff434163f042d22"
+    },
+    {
+      "file": "GetActiveStackManifest.sql",
+      "layer": "BE",
+      "line": 3,
+      "name": "GetActiveStackManifest",
+      "parameters": [],
+      "signatureHash": "sha256:64a5f5cacc4c3318eef48b2fab986c272d78998a43e5b41e7d7aa7feb0ae1532"
     },
     {
       "file": "GetAllChildrenFromFatherAndOrMotherWithPartners.sql",
@@ -3728,6 +3736,94 @@
         }
       ],
       "signatureHash": "sha256:15b8969c30f7e095b9ccf9fc48b0d0a7dce5ed5162f095c61c1335d8c3a7b320"
+    },
+    {
+      "file": "PublishStackManifest.sql",
+      "layer": "BE",
+      "line": 3,
+      "name": "PublishStackManifest",
+      "parameters": [
+        {
+          "mode": "IN",
+          "name": "StackBuildNumberIn",
+          "type": "BIGINT UNSIGNED"
+        },
+        {
+          "mode": "IN",
+          "name": "StackManifestSha256In",
+          "type": "CHAR(64)"
+        },
+        {
+          "mode": "IN",
+          "name": "ManifestJsonIn",
+          "type": "LONGTEXT"
+        },
+        {
+          "mode": "IN",
+          "name": "CompatibilityStatusIn",
+          "type": "VARCHAR(10)"
+        },
+        {
+          "mode": "IN",
+          "name": "CompatibilityErrorsIn",
+          "type": "LONGTEXT"
+        },
+        {
+          "mode": "IN",
+          "name": "ChangedByIn",
+          "type": "VARCHAR(255)"
+        }
+      ],
+      "signatureHash": "sha256:7d5127265581d7e0af746b5b4491d4554d4018cc1621a1ccfd28a17328a70fdf"
+    },
+    {
+      "file": "RegisterComponentManifest.sql",
+      "layer": "BE",
+      "line": 3,
+      "name": "RegisterComponentManifest",
+      "parameters": [
+        {
+          "mode": "IN",
+          "name": "ComponentIn",
+          "type": "VARCHAR(3)"
+        },
+        {
+          "mode": "IN",
+          "name": "VersionIn",
+          "type": "VARCHAR(32)"
+        },
+        {
+          "mode": "IN",
+          "name": "DockerImageTagIn",
+          "type": "VARCHAR(255)"
+        },
+        {
+          "mode": "IN",
+          "name": "SourceCommitIn",
+          "type": "CHAR(64)"
+        },
+        {
+          "mode": "IN",
+          "name": "ManifestSha256In",
+          "type": "CHAR(64)"
+        },
+        {
+          "mode": "IN",
+          "name": "ManifestJsonIn",
+          "type": "LONGTEXT"
+        },
+        {
+          "mode": "IN",
+          "name": "GeneratedAtIn",
+          "type": "DATETIME(6)"
+        },
+        {
+          "mode": "IN",
+          "name": "ChangedByIn",
+          "type": "VARCHAR(255)"
+        }
+      ],
+      "signatureHash": "sha256:fec563b53237613861b560c20da350363132b7f68b683ba99f256bedf08f825b"
     },
     {
       "file": "RemoveChildFromParent.sql",
@@ -7488,7 +7584,7 @@
       "signatureHash": "sha256:0efc7a71ae58f5093ff133c3637207084671fce760f01a9b89e7da9bcaeecac8"
     }
   ],
-  "generatedAt": "2026-09-11T22:34:07Z",
-  "sourceCommit": "ba78863c65c5f894b0e85bb2db5f398cfd440758",
-  "version": "4.0.0"
+  "generatedAt": "2026-09-13T10:20:51Z",
+  "sourceCommit": "1ae62472f678c12f8585b4f1d5117288fcc31d66",
+  "version": "5.0.0"
 }
