@@ -39,7 +39,7 @@ BEGIN
            JSON_OBJECT(
                'functions', COALESCE((
                    SELECT JSON_ARRAYAGG(JSON_OBJECT(
-                       'id', FunctionID,
+                       'key', FunctionKey,
                        'layer', Layer,
                        'name', FunctionName,
                        'version', CONCAT('v', Version),
@@ -53,17 +53,17 @@ BEGIN
                ), JSON_ARRAY()),
                'dependencies', COALESCE((
                    SELECT JSON_ARRAYAGG(JSON_OBJECT(
-                       'id', DependencyID,
-                       'callerFunctionId', CallerFunctionID,
-                       'calleeFunctionId', CalleeFunctionID,
+                       'key', DependencyKey,
+                       'callerFunctionKey', CallerFunctionKey,
+                       'calleeFunctionKey', CalleeFunctionKey,
                        'requiredMinVersion', CONCAT('v', RequiredMinVersion)
                    ))
                                      FROM humans.function_dependencies d
                                     JOIN humans.function_registry caller
-                                        ON caller.FunctionID = d.CallerFunctionID
+                                        ON caller.FunctionKey = d.CallerFunctionKey
                                      AND caller.Status = 'active'
                                     JOIN humans.function_registry callee
-                                        ON callee.FunctionID = d.CalleeFunctionID
+                                        ON callee.FunctionKey = d.CalleeFunctionKey
                                      AND callee.Status = 'active'
                ), JSON_ARRAY())
            ) AS Capabilities;

@@ -16,7 +16,7 @@ BEGIN
     DECLARE CompletedOk INT DEFAULT 0;
     DECLARE TransResult INT DEFAULT 200;
     DECLARE NewTransNo INT DEFAULT NULL;
-    DECLARE FunctionIDOut INT UNSIGNED DEFAULT NULL;
+    DECLARE FunctionKeyOut VARCHAR(511) DEFAULT NULL;
     DECLARE ExistingVersion INT UNSIGNED DEFAULT NULL;
     DECLARE ExistingSignatureHash CHAR(64) DEFAULT NULL;
     DECLARE ExistingCount INT DEFAULT 0;
@@ -51,7 +51,7 @@ BEGIN
         SELECT CompletedOk AS CompletedOk,
                TransResult AS Result,
                ErrorMessage AS ErrorMessage,
-               FunctionIDOut AS FunctionID;
+               FunctionKeyOut AS FunctionKey;
     END;
 
 main_proc:
@@ -87,20 +87,20 @@ BEGIN
        AND FunctionName = FunctionNameIn;
 
     IF ExistingCount = 0 THEN
-        INSERT INTO humans.function_registry
-            (Layer, FunctionName, Version, SignatureHash, LastChangedCommit, LastChangedAt, Status)
-        VALUES
-            (LayerIn, FunctionNameIn, VersionIn, SignatureHashIn, LastChangedCommitIn, NOW(), StatusIn);
+        SET FunctionKeyOut = CONCAT(LayerIn, ':', FunctionNameIn);
 
-        SET FunctionIDOut = LAST_INSERT_ID();
+        INSERT INTO humans.function_registry
+            (FunctionKey, Layer, FunctionName, Version, SignatureHash, LastChangedCommit, LastChangedAt, Status)
+        VALUES
+            (FunctionKeyOut, LayerIn, FunctionNameIn, VersionIn, SignatureHashIn, LastChangedCommitIn, NOW(), StatusIn);
 
         INSERT INTO humans.function_registry_audit
-            (FunctionID, OldVersion, NewVersion, BumpReason, ChangedBy, ChangedAt)
+            (FunctionKey, OldVersion, NewVersion, BumpReason, ChangedBy, ChangedAt)
         VALUES
-            (FunctionIDOut, NULL, VersionIn, BumpReasonIn, ChangedByIn, NOW());
+            (FunctionKeyOut, NULL, VersionIn, BumpReasonIn, ChangedByIn, NOW());
     ELSE
-        SELECT FunctionID, Version, SignatureHash
-          INTO FunctionIDOut, ExistingVersion, ExistingSignatureHash
+        SELECT FunctionKey, Version, SignatureHash
+          INTO FunctionKeyOut, ExistingVersion, ExistingSignatureHash
           FROM humans.function_registry
          WHERE Layer = LayerIn
            AND FunctionName = FunctionNameIn
@@ -116,13 +116,13 @@ BEGIN
                    LastChangedAt
                ),
                Status = StatusIn
-         WHERE FunctionID = FunctionIDOut;
+         WHERE FunctionKey = FunctionKeyOut;
 
         IF VersionIn <> ExistingVersion OR SignatureHashIn <> ExistingSignatureHash THEN
             INSERT INTO humans.function_registry_audit
-                (FunctionID, OldVersion, NewVersion, BumpReason, ChangedBy, ChangedAt)
+                (FunctionKey, OldVersion, NewVersion, BumpReason, ChangedBy, ChangedAt)
             VALUES
-                (FunctionIDOut, ExistingVersion, VersionIn, BumpReasonIn, ChangedByIn, NOW());
+                (FunctionKeyOut, ExistingVersion, VersionIn, BumpReasonIn, ChangedByIn, NOW());
         END IF;
     END IF;
 
@@ -133,7 +133,7 @@ BEGIN
             'TransAction-', IFNULL(NewTransNo, 'null'),
             '. End SPROC UpdateFunctionRegistry(). CompletedOk=', CompletedOk,
             ', Result=', TransResult,
-            ', FunctionID=', IFNULL(FunctionIDOut, 'null')
+            ', FunctionKey=', IFNULL(FunctionKeyOut, 'null')
         ),
             TestLogDateTime = NOW();
 END;
@@ -141,6 +141,6 @@ END;
 SELECT CompletedOk AS CompletedOk,
        TransResult AS Result,
        ErrorMessage AS ErrorMessage,
-       FunctionIDOut AS FunctionID;
+    FunctionKeyOut AS FunctionKey;
 END$$
 DELIMITER ;

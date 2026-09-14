@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS `humans`;
 USE `humans`;
 
 CREATE TABLE IF NOT EXISTS `function_registry` (
-    `FunctionID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `FunctionKey` VARCHAR(511) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `Layer` ENUM('FE', 'MW', 'BE') NOT NULL,
     `FunctionName` VARCHAR(255) NOT NULL,
     `Version` INT UNSIGNED NOT NULL DEFAULT 1,
@@ -10,36 +10,36 @@ CREATE TABLE IF NOT EXISTS `function_registry` (
     `LastChangedCommit` VARCHAR(64) DEFAULT NULL,
     `LastChangedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `Status` ENUM('active', 'deprecated', 'removed') NOT NULL DEFAULT 'active',
-    PRIMARY KEY (`FunctionID`),
+    PRIMARY KEY (`FunctionKey`),
     UNIQUE KEY `UQ_FUNCTION_REGISTRY_LAYER_NAME` (`Layer`, `FunctionName`),
     KEY `IX_FUNCTION_REGISTRY_STATUS` (`Status`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `function_dependencies` (
-    `DependencyID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `CallerFunctionID` INT UNSIGNED NOT NULL,
-    `CalleeFunctionID` INT UNSIGNED NOT NULL,
+    `DependencyKey` VARCHAR(1023) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `CallerFunctionKey` VARCHAR(511) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `CalleeFunctionKey` VARCHAR(511) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `RequiredMinVersion` INT UNSIGNED NOT NULL DEFAULT 1,
-    PRIMARY KEY (`DependencyID`),
-    UNIQUE KEY `UQ_FUNCTION_DEPENDENCIES_CALLER_CALLEE` (`CallerFunctionID`, `CalleeFunctionID`),
+    PRIMARY KEY (`DependencyKey`),
+    UNIQUE KEY `UQ_FUNCTION_DEPENDENCIES_CALLER_CALLEE` (`CallerFunctionKey`, `CalleeFunctionKey`),
     CONSTRAINT `FK_FUNCTION_DEPENDENCIES_CALLER`
-        FOREIGN KEY (`CallerFunctionID`) REFERENCES `function_registry` (`FunctionID`)
+        FOREIGN KEY (`CallerFunctionKey`) REFERENCES `function_registry` (`FunctionKey`)
         ON DELETE CASCADE,
     CONSTRAINT `FK_FUNCTION_DEPENDENCIES_CALLEE`
-        FOREIGN KEY (`CalleeFunctionID`) REFERENCES `function_registry` (`FunctionID`)
+        FOREIGN KEY (`CalleeFunctionKey`) REFERENCES `function_registry` (`FunctionKey`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `function_registry_audit` (
     `AuditID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `FunctionID` INT UNSIGNED NOT NULL,
+    `FunctionKey` VARCHAR(511) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `OldVersion` INT UNSIGNED DEFAULT NULL,
     `NewVersion` INT UNSIGNED NOT NULL,
     `BumpReason` VARCHAR(64) NOT NULL,
     `ChangedBy` VARCHAR(255) DEFAULT NULL,
     `ChangedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`AuditID`),
-    KEY `IX_FUNCTION_REGISTRY_AUDIT_FUNCTION` (`FunctionID`),
+    KEY `IX_FUNCTION_REGISTRY_AUDIT_FUNCTION` (`FunctionKey`),
     CONSTRAINT `FK_FUNCTION_REGISTRY_AUDIT_FUNCTION`
-        FOREIGN KEY (`FunctionID`) REFERENCES `function_registry` (`FunctionID`)
+        FOREIGN KEY (`FunctionKey`) REFERENCES `function_registry` (`FunctionKey`)
 ) ENGINE=InnoDB;
