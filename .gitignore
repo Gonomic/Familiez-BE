@@ -26,6 +26,7 @@
 
 # misc
 /.sass-cache
+__pycache__/
 /connect.lock
 /coverage
 /libpeerconnection.log

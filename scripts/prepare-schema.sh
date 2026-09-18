@@ -27,4 +27,10 @@ for f in "${files[@]}"; do
   sed -n '1,99999p' "$f" | sed 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' >> "$outfile"
 done
 
+if [ -f "CreateVersioningManifests.sql" ]; then
+  echo >> "$outfile"
+  echo "-- ===== FILE: CreateVersioningManifests.sql =====" >> "$outfile"
+  sed -n '1,99999p' "CreateVersioningManifests.sql" >> "$outfile"
+fi
+
 echo "Wrote $outfile (files: ${#files[@]})"
