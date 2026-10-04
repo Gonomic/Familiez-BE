@@ -1,4 +1,7 @@
 {
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.testing.unittestEnabled": true,
+    "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "test_*.py"],
     "sqltools.connections": [
         {
             "database": "humans",
