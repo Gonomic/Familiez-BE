@@ -69,3 +69,6 @@ ALTER TABLE `function_registry`
     DROP PRIMARY KEY,
     DROP COLUMN `FunctionID`,
     ADD PRIMARY KEY (`FunctionKey`);
+
+ALTER TABLE `function_registry`
+    DROP INDEX `UQ_FUNCTION_REGISTRY_KEY`;
