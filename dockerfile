@@ -1,5 +1,5 @@
 # Use the same supported MariaDB line as the root Compose configurations.
-FROM mariadb:10.6
+FROM mariadb:13.0
 
 
 # Create directory to contain files for initialization of DB structure
