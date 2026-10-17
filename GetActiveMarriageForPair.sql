@@ -26,8 +26,10 @@ BEGIN
         PB.PersonFamilyName AS PartnerBFamilyName,
         PB.PersonDateOfDeath AS PartnerBDateOfDeath,
         M.StartDate,
+            M.StartDateStatus,
         M.MarriagePlace,
         M.EndDate,
+            M.EndDateStatus,
         M.EndReason,
         1 AS IsActive,
         CASE

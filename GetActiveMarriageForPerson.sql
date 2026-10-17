@@ -19,8 +19,10 @@ BEGIN
         P.PersonDateOfBirth AS PartnerDateOfBirth,
         P.PersonDateOfDeath AS PartnerDateOfDeath,
         M.StartDate,
+            M.StartDateStatus,
         M.MarriagePlace,
         M.EndDate,
+            M.EndDateStatus,
         M.EndReason,
         1 AS IsActive,
         CASE

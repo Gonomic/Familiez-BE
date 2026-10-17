@@ -166,6 +166,10 @@ docker compose exec mysql mysql -uroot -prootpassword -e "SELECT VERSION();"
 - Always regenerate init files after modifying source SQL files
 - `prepare-init.sh` uses `tac` (reverse cat) to intelligently handle nested blocks
 
+### Marriage date precision migration
+
+For an existing database, apply `AddMarriageDateStatusColumns.sql` after the `marriages` table exists and before deploying the new marriage procedure or application versions. The migration is idempotent and treats existing start and end dates as exact. `CreateMarriagesTable.sql` includes the columns for newly created tables. Generating init routines does not apply this migration.
+
 ## Connection Details
 - Host: localhost
 - Port: 3306

@@ -112,6 +112,7 @@ BEGIN
         
             UPDATE humans.marriages
             SET EndDate = EndDateIn,
+                EndDateStatus = 1,
                 EndReason = NormalizedEndReason
             WHERE MarriageID = ActiveMarriageId;
             

@@ -118,6 +118,7 @@ BEGIN
             SET PartnerAID = PartnerALocal,
                 PartnerBID = PartnerBLocal,
                 StartDate = StartDateIn,
+                StartDateStatus = 1,
                 MarriagePlace = NormalizedMarriagePlace
             WHERE humans.marriages.MarriageID = ActiveMarriageId;
 
